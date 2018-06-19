@@ -4,8 +4,9 @@
 const cards = document.querySelectorAll('.card');
 console.log(cards);
 
+deckEle = document.querySelector(".deck");
 
-ul.addEventListener('click', event => {
+deckEle.addEventListener('click', event => {
 const clickTarget = event.target;
 if (clickTarget.classList.contains('card')){
   clickTarget.classList.toggle('open');
