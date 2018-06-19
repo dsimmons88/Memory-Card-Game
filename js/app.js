@@ -1,7 +1,17 @@
 /*
  * Create a list that holds all of your cards
  */
+const cards = document.querySelectorAll('.card');
+console.log(cards);
 
+
+ul.addEventListener('click', event => {
+const clickTarget = event.target;
+if (clickTarget.classList.contains('card')){
+  clickTarget.classList.toggle('open');
+  clickTarget.classList.toggle('show');
+  }
+});
 
 /*
  * Display the cards on the page
