@@ -6,10 +6,16 @@ console.log(cards);
 
 deckEle = document.querySelector(".deck");
 
+let toggleCards = [];
+
 deckEle.addEventListener('click', event => {
 const clickTarget = event.target;
-if (clickTarget.classList.contains('card')){
+if (clickTarget.classList.contains('card') && toggleCards.length < 2){
   toggleCard(clickTarget);
+  addtoggleCard(clickTarget)
+  if (toggleCards.length == 2) {
+    console.log('2 cards!');
+  }
   }
 });
 
@@ -17,6 +23,16 @@ function toggleCard(clickTarget) {
   clickTarget.classList.toggle('open');
   clickTarget.classList.toggle('show');
 }
+
+function addtoggleCard(clickTarget) {
+  toggleCards.push(clickTarget);
+  console.log(toggleCards);
+}
+
+
+
+
+
 
 /*
  * Display the cards on the page
