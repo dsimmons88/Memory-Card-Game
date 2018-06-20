@@ -6,15 +6,26 @@ console.log(cards);
 
 deckEle = document.querySelector(".deck");
 
-let toggleCards = [];
+let toggledCards = [];
 
 deckEle.addEventListener('click', event => {
 const clickTarget = event.target;
-if (clickTarget.classList.contains('card') && toggleCards.length < 2){
+if (clickTarget.classList.contains('card') && toggledCards.length < 2){
   toggleCard(clickTarget);
   addtoggleCard(clickTarget)
-  if (toggleCards.length == 2) {
+  if (toggledCards.length == 2) {
     console.log('2 cards!');
+    if (
+      toggledCards[0].innerHTML ===
+      toggledCards[1].innerHTML
+    ) {
+      toggledCards[0].classList.toggle("match");
+      toggledCards[0].classList.toggle("match");
+      toggledCards = [];
+    } else {
+      console.log("not a match");
+      toggledCards = [];
+    }
   }
   }
 });
@@ -25,12 +36,9 @@ function toggleCard(clickTarget) {
 }
 
 function addtoggleCard(clickTarget) {
-  toggleCards.push(clickTarget);
-  console.log(toggleCards);
+  toggledCards.push(clickTarget);
+  console.log(toggledCards);
 }
-
-
-
 
 
 
