@@ -4,20 +4,31 @@
 const cards = document.querySelectorAll('.card');
 console.log(cards);
 
-deckEle = document.querySelector(".deck");
+const deck = document.querySelector(".deck");
 
 let toggledCards = [];
+let moves = 0;
+let clockOff = true;
+let time = 0;
 
-deckEle.addEventListener('click', event => {
+
+
+deck.addEventListener('click', event => {
 const clickTarget = event.target;
 if (isClickValid(clickTarget)) {
-  toggleCard(clickTarget)
-  addToggleCard(clickTarget);
-  if (toggledCards.length === 2) {
-    checkForMatch(clickTarget);
-    console.log("2 cards");
+        startClock();
+
+
+
+
+        toggleCard(clickTarget);
+        addToggleCard(clickTarget);
+        if (toggledCards.length === 2) {
+            checkForMatch(clickTarget);
+            addMove();
+            checkScore();
+            }
   }
-    }
 });
 
 
@@ -55,6 +66,68 @@ function isClickValid(clickTarget) {
         !toggledCards.includes(clickTarget)
       );
 }
+
+function shuffleDeck() {
+  const  cardsToShuffle = Array.from(document.querySelectorAll(".deck li"));
+  const  shuffleCards = shuffle(cardsToShuffle);
+  for (card of shuffleCards) {
+    deck.appendChild(card);
+  }
+}
+shuffleDeck();
+
+function addMove() {
+    moves++
+    const movesText = document.querySelector('.moves');
+    movesText.innerHTML = moves;
+}
+
+function checkScore() {
+if (moves === 16 || moves === 24) {
+  hideStar();
+  }
+}
+
+function hideStar() {
+  const starList = document.querySelectorAll('.stars li')
+  for (star of starList){
+      if (star.style.display !== 'none'){
+          star.style.display = 'none';
+          break;
+      }
+  }
+}
+
+
+//let timer = setInterval(startClock, 1000);
+
+function startClock() {
+  let timer = setInterval(function() {
+time++;
+
+const minutes = Math.floor(time/60);
+const seconds = time % 60;
+
+document.querySelector('.clock').innerHTML = minutes+ ":" + seconds;
+}, 1000);
+}
+
+
+
+/*function startClock() {
+  let clockId = setInterval (() => {
+    time++;
+    console.log(time);
+  }, 1000);
+}
+
+function displayTime() {
+  const clock = document.querySelector('.clock');
+  console.log(clock);
+  document.querySelector('.clock').innerHTML = time;
+}
+
+
 
 
 
