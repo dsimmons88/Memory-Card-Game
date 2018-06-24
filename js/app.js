@@ -4,22 +4,23 @@
 const cards = document.querySelectorAll('.card');
 console.log(cards);
 
+// global variables
 const deck = document.querySelector(".deck");
-
 let toggledCards = [];
 let moves = 0;
 let clockOff = true;
 let time = 0;
+let timer;
+let matched = 0;
 
-
-
+// event target for click on card
 deck.addEventListener('click', event => {
 const clickTarget = event.target;
 if (isClickValid(clickTarget)) {
+      if(clockOff) {
         startClock();
-
-
-
+        clockOff = false;
+      }
 
         toggleCard(clickTarget);
         addToggleCard(clickTarget);
@@ -32,17 +33,20 @@ if (isClickValid(clickTarget)) {
 });
 
 
-
+// function for when an card is click
 function toggleCard(card) {
   card.classList.toggle('open');
   card.classList.toggle('show');
 }
+
+//add click card to toggledCards
 
 function addToggleCard(clickTarget) {
   toggledCards.push(clickTarget);
   console.log(toggledCards);
 }
 
+//checks for match
 function checkForMatch() {
   if (toggledCards[0].firstElementChild.className ===
       toggledCards[1].firstElementChild.className
@@ -50,15 +54,24 @@ function checkForMatch() {
     toggledCards[0].classList.toggle("match");
     toggledCards[1].classList.toggle("match");
     toggledCards = [];
+    matched++;
+    const TOTAL_PAIRS = 8;
+    if (matched == TOTAL_PAIRS) {
+      gameOver();
+    }
+
   } else {
     setTimeout (() => {
       toggleCard(toggledCards[0]);
       toggleCard(toggledCards[1]);
       toggledCards = [];
+
+
     }, 1000);
 }
 }
 
+// to make my if statment in the event target function cleaner
 function isClickValid(clickTarget) {
     return (clickTarget.classList.contains('card') &&
         !clickTarget.classList.contains('match') &&
@@ -66,6 +79,8 @@ function isClickValid(clickTarget) {
         !toggledCards.includes(clickTarget)
       );
 }
+
+//shuffle cards in matching game
 
 function shuffleDeck() {
   const  cardsToShuffle = Array.from(document.querySelectorAll(".deck li"));
@@ -76,17 +91,22 @@ function shuffleDeck() {
 }
 shuffleDeck();
 
+//counts moves and adds them to the HTML
 function addMove() {
     moves++
     const movesText = document.querySelector('.moves');
     movesText.innerHTML = moves;
 }
 
+//checks score to know when to remove star
+
 function checkScore() {
 if (moves === 16 || moves === 24) {
   hideStar();
   }
 }
+
+// hides the star using style
 
 function hideStar() {
   const starList = document.querySelectorAll('.stars li')
@@ -99,39 +119,127 @@ function hideStar() {
 }
 
 
-//let timer = setInterval(startClock, 1000);
+//stars the clock and displays it
 
 function startClock() {
-  let timer = setInterval(function() {
+   timer = setInterval(function() {
 time++;
 
 const minutes = Math.floor(time/60);
 const seconds = time % 60;
 
+
 document.querySelector('.clock').innerHTML = minutes+ ":" + seconds;
+
+if (seconds < 10) {
+  document.querySelector('.clock').innerHTML = `${minutes}:0${seconds}`;
+} else {
+  document.querySelector('.clock').innerHTML = `${minutes}:${seconds}`;
+}
 }, 1000);
 }
 
+//stops clock
+function stopClock() {
+  clearInterval(timer);
+}
 
 
-/*function startClock() {
-  let clockId = setInterval (() => {
-    time++;
-    console.log(time);
-  }, 1000);
+function toggleModal() {
+  const modal = document.querySelector('.modal__background');
+  modal.classList.toggle('hide');
 }
 
 function displayTime() {
-  const clock = document.querySelector('.clock');
-  console.log(clock);
-  document.querySelector('.clock').innerHTML = time;
+  console.log(document.querySelector('.clock').innerHTML);
+
 }
 
 
+// writes the stats for the modal after a game over.
+function writeModalStats() {
+  const timeStat = document.querySelector('.modal__time');
+  const clockTime = document.querySelector('.clock').innerHTML;
+  const movesStat = document.querySelector('.modal__moves');
+  const starsStat = document.querySelector('.modal__stars');
+  const stars = getStars();
+
+  timeStat.innerHTML = `Time = ${clockTime}`;
+  movesStat.innerHTML = `Moves = ${moves}`
+  starsStat.innerHTML = `Stars = ${stars}`
+}
+
+// gets the numbers of stars for the modal
+function getStars() {
+  stars = document.querySelectorAll('.stars li');
+  starCount = 0;
+  for (star of stars) {
+    if (star.style.display !== 'none') {
+      starCount++;
+    }
+  }
+  console.log(starCount);
+  return starCount;
+}
+
+//cancel button
+document.querySelector('.modal__cancel').addEventListener('click', () =>{
+  toggleModal();
+});
+// replay button
+document.querySelector('.modal__replay').addEventListener('click', () => {
+  //make function for replay
+});
 
 
+//reset game
+
+function resetGame() {
+  resetClockAndTime();
+  resetMoves();
+  resetStars();
+  shuffleDeck();
+window.location.reload(false)
+}
+
+function resetClockAndTime() {
+  stopClock();
+  clockOff = true;
+  time = 0;
+  displayTime();
+}
+
+function resetMoves() {
+  moves = 0;
+  document.querySelector('.moves').innerHTML = moves;
+}
+
+function resetStars() {
+  stars = 0;
+  const starList = document.querySelectorAll('.stars li');
+  for (star of starList) {
+    star.style.display = 'inline';
+
+  }
+}
+
+//resets the game
+document.querySelector('.restart').addEventListener('click', resetGame);
+//replays the game
+document.querySelector('.modal__replay').addEventListener('click', replayGame);
 
 
+//game over
+function gameOver() {
+  stopClock();
+  writeModalStats();
+  toggleModal();
+}
+
+function replayGame() {
+  resetGame();
+  toggleModal();
+}
 
 
 /*
@@ -155,6 +263,12 @@ function shuffle(array) {
 
     return array;
 }
+
+
+/*
+Big Thanks to Matthew Crawford for the walk-through of this project. It was a big help. 
+*/
+
 
 
 /*
