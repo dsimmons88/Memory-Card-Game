@@ -12,6 +12,7 @@ let clockOff = true;
 let time = 0;
 let timer;
 let matched = 0;
+let matchedCards = [];
 
 // event target for click on card
 deck.addEventListener('click', event => {
@@ -53,13 +54,18 @@ function checkForMatch() {
   ) {
     toggledCards[0].classList.toggle("match");
     toggledCards[1].classList.toggle("match");
+    matchedCards.push(toggledCards);
+
+    console.log(matchedCards);
     toggledCards = [];
+
     matched++;
     const TOTAL_PAIRS = 8;
     if (matched == TOTAL_PAIRS) {
-      gameOver();
-    }
-
+      setTimeout (() => {
+        gameOver();
+      }, 2000);
+}
   } else {
     setTimeout (() => {
       toggleCard(toggledCards[0]);
@@ -80,6 +86,18 @@ function isClickValid(clickTarget) {
       );
 }
 
+//loop to remove matchedCards
+function removeCards() {
+
+
+  for(let i = 0; i < matchedCards.length; i++){
+    for(let y = 0; y < matchedCards[i].length; y++){
+      matchedCards[i][y].classList.remove("match");
+      matchedCards[i][y].classList.remove("open");
+      matchedCards[i][y].classList.remove("show");
+      }
+    }
+}
 //shuffle cards in matching game
 
 function shuffleDeck() {
@@ -198,15 +216,19 @@ function resetGame() {
   resetClockAndTime();
   resetMoves();
   resetStars();
+  removeCards();
   shuffleDeck();
-window.location.reload(false)
+//window.location.reload(false)
+
 }
+
+
 
 function resetClockAndTime() {
   stopClock();
   clockOff = true;
   time = 0;
-  displayTime();
+  document.querySelector('.clock').innerHTML = "0:00";
 }
 
 function resetMoves() {
@@ -266,7 +288,7 @@ function shuffle(array) {
 
 
 /*
-Big Thanks to Matthew Crawford for the walk-through of this project. It was a big help. 
+Big Thanks to Matthew Crawford for the walk-through of this project. It was a big help.
 */
 
 
