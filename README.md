@@ -14,9 +14,9 @@
 
 ## Contributing
 
-I have everybody who has help me for this project.
+If you want more info on how help me on this project.
 
-For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+Click For details, [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## details
 
